@@ -1191,8 +1191,8 @@ export default function App() {
   }
 
   const MIN_CARD = 150;
-  const GAP = 8;
-  const PADDING = 16;
+  const GAP = 4;
+  const PADDING = 4;
 
   const availableWidth = width - (PADDING * 2);
   const columnCount = Math.max(1, Math.min(
@@ -1916,7 +1916,7 @@ export default function App() {
           />
         </View>
 
-        <View style={[styles.productGrid, { paddingHorizontal: 16, rowGap: 8, columnGap: 8 }]}>
+        <View style={[styles.productGrid, { paddingHorizontal: 4, rowGap: 4, columnGap: 4 }]}>
           {categoriesError ? (
             <Text style={{color: 'red', textAlign: 'center', width: '100%', marginBottom: 16, fontWeight: 'bold'}}>{categoriesError}</Text>
           ) : null}
