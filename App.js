@@ -140,7 +140,7 @@ const mapProductRowToCard = (row, catNameToImageMap = {}, catIdToNameMap = {}) =
   };
 };
 
-function CategoryCard({ category, cardWidth, currency, onAddToCart }) {
+function CategoryCard({ category, cardWidth, currency, onAddToCart, isPhone }) {
   const [selectedWeight, setSelectedWeight] = useState('250g');
   const itemPrice = useMemo(() => {
     if (!category.hasWeights) return category.price || 0;
@@ -150,11 +150,23 @@ function CategoryCard({ category, cardWidth, currency, onAddToCart }) {
     return 0;
   }, [selectedWeight, category]);
 
+  // Compact sizes for real phone 2-column layout (~167px cards)
+  const cardPad   = isPhone ? 8  : 14;
+  const barHeight = isPhone ? 22 : 32;
+  const nameFz    = isPhone ? 14 : 24;
+  const nameLineH = isPhone ? 18 : 28;
+  const priceFz   = isPhone ? 12 : 20;
+  const weightPad = isPhone ? 6  : 10;
+  const weightFz  = isPhone ? 10 : 12;
+  const btnPad    = isPhone ? 8  : 13;
+  const btnFz     = isPhone ? 9  : 12;
+  const btnLs     = isPhone ? 0.6 : 1.8;
+
   return (
-    <View style={[styles.productCard, { width: cardWidth }]}> 
-      <View style={[styles.imageWrap, { width: cardWidth - 28 }]}>
-        <View style={styles.cardHeaderBar}>
-          <Text style={styles.cardHeaderInscription} numberOfLines={1} adjustsFontSizeToFit>
+    <View style={[styles.productCard, { width: cardWidth, padding: cardPad }]}>
+      <View style={[styles.imageWrap, { width: cardWidth - cardPad * 2 }]}>
+        <View style={[styles.cardHeaderBar, { height: barHeight }]}>
+          <Text style={[styles.cardHeaderInscription, isPhone && { fontSize: 9 }]} numberOfLines={1} adjustsFontSizeToFit>
             Johnny's Food And Meat Complex
           </Text>
         </View>
@@ -168,36 +180,38 @@ function CategoryCard({ category, cardWidth, currency, onAddToCart }) {
           ) : null}
         </View>
 
-        <View style={styles.cardFooterBar} />
+        <View style={[styles.cardFooterBar, { height: barHeight }]} />
 
         <Image
           source={require('./assets/jfamco_logo.png')}
-          style={[styles.cardSignatureLogo, { width: Math.round(cardWidth * 0.32), height: Math.round(cardWidth * 0.32) }]}
+          style={[styles.cardSignatureLogo, { width: Math.round(cardWidth * 0.28), height: Math.round(cardWidth * 0.28) }]}
           resizeMode="contain"
         />
       </View>
 
-      <View style={styles.rowBetween}>
-        <Text style={styles.productName}>{category.name}</Text>
-        <Text style={styles.productPrice}>{formatMoney(itemPrice, currency)}</Text>
+      <View style={[styles.rowBetween, { gap: 4 }]}>
+        <Text style={[styles.productName, { fontSize: nameFz, lineHeight: nameLineH }]} numberOfLines={isPhone ? 2 : undefined}>
+          {category.name}
+        </Text>
+        <Text style={[styles.productPrice, { fontSize: priceFz }]}>{formatMoney(itemPrice, currency)}</Text>
       </View>
-      <Text style={styles.priceUnit}>{category.hasWeights ? 'Price per lb' : 'Price per unit'}</Text>
-      <Text style={styles.categoryDescription}>{category.description}</Text>
+      <Text style={styles.priceUnit}>{category.hasWeights ? 'Price per unit' : 'Price per unit'}</Text>
+      {/* Hide description on phone to save vertical space */}
+      {!isPhone && <Text style={styles.categoryDescription}>{category.description}</Text>}
 
       {category.hasWeights && (
         <View style={styles.weightWrap}>
-          <Text style={styles.weightLabel}>SELECT WEIGHT</Text>
+          {!isPhone && <Text style={styles.weightLabel}>SELECT WEIGHT</Text>}
           <View style={styles.weightOptionsRow}>
             {weightOptions.map((option) => {
               const active = option === selectedWeight;
-
               return (
                 <Pressable
                   key={option}
                   onPress={() => setSelectedWeight(option)}
-                  style={[styles.weightOption, active && styles.weightOptionActive]}
+                  style={[styles.weightOption, active && styles.weightOptionActive, { paddingVertical: weightPad }]}
                 >
-                  <Text style={[styles.weightOptionText, active && styles.weightOptionTextActive]}>
+                  <Text style={[styles.weightOptionText, active && styles.weightOptionTextActive, { fontSize: weightFz }]}>
                     {option}
                   </Text>
                 </Pressable>
@@ -208,10 +222,12 @@ function CategoryCard({ category, cardWidth, currency, onAddToCart }) {
       )}
 
       <Pressable
-        style={styles.addBtn}
+        style={[styles.addBtn, { marginTop: isPhone ? 8 : 14, paddingVertical: btnPad }]}
         onPress={() => onAddToCart(category, category.hasWeights ? selectedWeight : 'unit', itemPrice)}
       >
-        <Text style={styles.addBtnText}>ADD TO CART • {formatMoney(itemPrice, currency)}</Text>
+        <Text style={[styles.addBtnText, { fontSize: btnFz, letterSpacing: btnLs }]}>
+          {isPhone ? `ADD • ${formatMoney(itemPrice, currency)}` : `ADD TO CART • ${formatMoney(itemPrice, currency)}`}
+        </Text>
       </Pressable>
     </View>
   );
@@ -1904,6 +1920,7 @@ export default function App() {
               cardWidth={cardWidth}
               currency={currency}
               onAddToCart={addToCart}
+              isPhone={isPhoneScreen}
             />
           ))}
           {filteredCategories.length === 0 ? (
