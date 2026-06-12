@@ -1128,21 +1128,45 @@ export default function App() {
       stock_quantity: parseInt(editingProduct.stock_quantity) || 0,
     };
 
+    // --- Optimistic local update: shop reflects changes immediately ---
+    const optimisticCard = {
+      ...editingProduct,
+      name: editingProduct.name.trim(),
+      price_250g: p250 ?? editingProduct.price_250g,
+      price_500g: p500 ?? editingProduct.price_500g,
+      price_1kg:  p1kg  ?? editingProduct.price_1kg,
+      price:      pUnit ?? editingProduct.price,
+      hasWeights: editingProduct.hasWeights,
+      tag:        editingProduct.tag?.trim() || null,
+      description: editingProduct.description?.trim() || '',
+      image:      editingProduct.image?.trim() || editingProduct.image,
+      stock_quantity: parseInt(editingProduct.stock_quantity) || 0,
+    };
+    setProductCards((prev) =>
+      prev.map((p) => (p.id === editingProduct.id ? { ...p, ...optimisticCard } : p))
+    );
+    setEditProductModalVisible(false);
+    setEditingProduct(null);
+
+    // --- Sync to Supabase in background ---
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('products')
         .update(updatedFields)
-        .eq('id', editingProduct.id);
+        .eq('id', editingProduct.id)
+        .select();
 
       if (error) throw error;
 
-      setEditProductModalVisible(false);
-      setEditingProduct(null);
-      loadSupabaseData();
+      if (!data || data.length === 0) {
+        alert('Product updated locally but the database may have blocked it (check RLS policies).');
+      } else {
+        // Full reload to ensure shop is in sync with DB
+        loadSupabaseData();
+      }
     } catch (err) {
-      console.warn('Failed to update product in Supabase. Modifying locally:', err.message);
-      setEditProductModalVisible(false);
-      setEditingProduct(null);
+      console.warn('Supabase update failed:', err.message);
+      alert(`Changes saved locally only.\nDatabase error: ${err.message}\n\nTip: Your session may have expired — try signing out and back in.`);
     }
   };
 
