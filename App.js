@@ -1148,25 +1148,43 @@ export default function App() {
     setEditProductModalVisible(false);
     setEditingProduct(null);
 
-    // --- Sync to Supabase in background ---
+    // --- Sync to Supabase: refresh session first, then update ---
     try {
-      const { data, error } = await supabase
+      // 1. Ensure we have a valid session
+      let { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        const { data: refreshData } = await supabase.auth.refreshSession();
+        session = refreshData?.session;
+      }
+      if (!session) {
+        alert('Admin session expired. Please sign out and sign back in to save changes to the database.');
+        return;
+      }
+
+      // 2. Push update to Supabase
+      const { error } = await supabase
         .from('products')
         .update(updatedFields)
-        .eq('id', editingProduct.id)
-        .select();
+        .eq('id', editingProduct.id);
 
       if (error) throw error;
 
-      if (!data || data.length === 0) {
-        alert('Product updated locally but the database may have blocked it (check RLS policies).');
+      // 3. Verify the update landed by fetching the row back
+      const { data: verified } = await supabase
+        .from('products')
+        .select('id, name')
+        .eq('id', editingProduct.id)
+        .single();
+
+      if (verified) {
+        console.log('✅ Supabase confirmed update for:', verified.name);
+        loadSupabaseData(); // full refresh
       } else {
-        // Full reload to ensure shop is in sync with DB
-        loadSupabaseData();
+        alert('Saved locally. Supabase did not confirm the update — your admin session may have expired. Please sign out and back in.');
       }
     } catch (err) {
       console.warn('Supabase update failed:', err.message);
-      alert(`Changes saved locally only.\nDatabase error: ${err.message}\n\nTip: Your session may have expired — try signing out and back in.`);
+      alert(`Changes saved locally only.\nError: ${err.message}\n\nSign out and back in as admin, then try again.`);
     }
   };
 
