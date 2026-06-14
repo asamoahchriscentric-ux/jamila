@@ -32,72 +32,74 @@ const palette = {
 };
 
 const fallbackChips = [
-  'Antelope',
-  'Bush Meat',
-  'Chicken',
-  'Cow And Beef',
-  'Duck',
-  'Fish',
-  'Goat',
-  'Lamb',
-  'Others',
-  'Pork',
-  'Sausage',
-  'Sea Food',
-  'Turkey',
+  'Sneakers',
+  'Boots',
+  'Sandals',
+  'Heels',
+  'Loafers',
+  'Athletic',
+  'Formal',
+  'Casual',
+  'Flip Flops',
+  'Slippers',
+  'Running',
+  'Oxford',
+  'Moccasins',
 ];
-const weightOptions = ['250g', '500g', '1kg'];
+const weightOptions = ['US 7', 'US 8', 'US 9', 'US 10', 'US 11'];
 const weightMultipliers = {
-  '250g': 0.25,
-  '500g': 0.5,
-  '1kg': 1,
+  'US 7': 7,
+  'US 8': 8,
+  'US 9': 9,
+  'US 10': 10,
+  'US 11': 11,
 };
 
 const fallbackCategoryCards = [
   {
-    id: 'beef',
-    name: 'Wagyu Ground Beef',
-    price: 22,
-    tag: 'Dry-Aged 45 Days',
-    description: 'Prime cuts, wagyu, ribeye, sirloin and gourmet burger blends.',
+    id: 'sneakers',
+    name: 'Nike Air Max 90',
+    price: 150,
+    tag: 'Best Seller',
+    description: 'Classic sneaker with Max Air cushioning for all-day comfort.',
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuA7WJk6TcT_FGW0dQPxBM53dYqJOqE4rSdEk8NaGqk4HXCEGCmYdOh0gK-JkFo6OrRmJ4zmo6rKaCFuY_3xVjp4HB6vKmw999cAIKt-QtObMj3USGISUX2HTLr3_WijNS1anmDfPnzrNm4X13gsThXwr66dqBro1B70TP2PYE3NBkQLLAcTvlsfafo0xj0QFwR4y3qME2w1w0oTLVTW65Nv4k38qnSJErYgNBisx9cTwbfQliNVlQm_BBALmr4B4qotHtvAiexZzm0',
+      'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9ff?auto=format&fit=crop&w=900&q=80',
   },
   {
-    id: 'poultry',
-    name: 'Poultry',
-    price: 16,
-    tag: 'Farm Raised',
-    description: 'Chicken, turkey, duck, and free-range specialty poultry cuts.',
+    id: 'boots',
+    name: 'Timberland Pro',
+    price: 180,
+    tag: 'Premium',
+    description: 'Industrial-grade work boots with steel toe protection.',
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDd6wdd8o3-qkdLzDXOQ4FUl8HciAzVfTv17feXFSorgP7IhMJz_pHjESZi1iSm1wS-Iej1RuAevA5dPkPlHcMLvuN7w45XZuIE8h1DPf2kjRAzI3h5cGrn0wOHVJGJKBkmMeHW_QaMNfOJDa0r6BHOARpV88UoOmujplbwDbB9LXF3Za2WCcOIiSeYud7xhYEDYVzuSU1p9Bl7exj3cVmTdciMEDX9GuiiRa3J4P2j5630a2mfP9cRTBzepbGnRNuEKjwy69VONWY',
+      'https://images.unsplash.com/photo-1551107696-a4b0c5c0d0c0?auto=format&fit=crop&w=900&q=80',
   },
   {
-    id: 'lamb',
-    name: 'Lamb',
-    price: 12,
-    tag: 'A5 Grade',
-    description: 'Grass-fed racks, chops, shanks and slow-cook classics.',
+    id: 'heels',
+    name: 'Jimmy Choo Pumps',
+    price: 350,
+    tag: 'Designer',
+    description: 'Elegant stiletto heels perfect for formal occasions.',
     image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuAaW9tugzK_ctg3NZyqQ2uyx-7TgVQZnKM7_FQwWdgH6OCUpqC7l7f-fUAs8Z42NH1thJFTjhc5f05tIxFMonHmlYP4n9Q4ukPUhc7bcZhbTDKf8UW5yEbd5lK9jgMxY7LQEG43MCD2tx5HQ9gEK-88t8mo89Sok8dm_tvjCTgvqTk9vVg7pr7XJ-ZZfyZh9qQ8v-NoMQ4JKPrFqUBRVu5yqNTuFVM2DXVBF6EmDHIDkzR2iFkXA1b8aRq8h53aEy2oml4aCpD8rIA',
+      'https://images.unsplash.com/photo-1543163521-1bf539e0cf6d?auto=format&fit=crop&w=900&q=80',
   },
   {
-    id: 'pork',
-    name: 'Pork',
-    price: 18,
-    tag: 'Heritage Breed',
-    description: 'Pork belly, chops, shoulder and handcrafted sausages.',
+    id: 'loafers',
+    name: 'Gucci Horsebit',
+    price: 280,
+    tag: 'Luxury',
+    description: 'Classic leather loafers with signature horsebit detail.',
     image:
-      'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=900&q=80',
+      'https://images.unsplash.com/photo-1533867617858-e611d85c33c9?auto=format&fit=crop&w=900&q=80',
   },
   {
-    id: 'deli',
-    name: 'Deli',
-    price: 14,
-    tag: 'Ready Sliced',
-    description: 'Cured meats, charcuterie boards and chef-ready cold cuts.',
+    id: 'sandals',
+    name: 'Birkenstock Arizona',
+    price: 99,
+    tag: 'Comfort',
+    description: 'Iconic sandals with contoured cork footbed.',
     image:
-      'https://images.unsplash.com/photo-1608039755401-742074f0548d?auto=format&fit=crop&w=900&q=80',
+      'https://images.unsplash.com/photo-1603487742131-41651ecf9d5f?auto=format&fit=crop&w=900&q=80',
   },
 ];
 
@@ -141,18 +143,19 @@ const mapProductRowToCard = (row, catNameToImageMap = {}, catIdToNameMap = {}) =
 };
 
 function CategoryCard({ category, cardWidth, currency, onAddToCart, isPhone }) {
-  const [selectedWeight, setSelectedWeight] = useState('250g');
+  const [selectedWeight, setSelectedWeight] = useState('US 9');
   const itemPrice = useMemo(() => {
     if (!category.hasWeights) return category.price || 0;
-    if (selectedWeight === '250g') return category.price_250g || 0;
-    if (selectedWeight === '500g') return category.price_500g || 0;
-    if (selectedWeight === '1kg') return category.price_1kg || 0;
+    if (selectedWeight === 'US 7') return category.price_250g || 0;
+    if (selectedWeight === 'US 8') return category.price_500g || 0;
+    if (selectedWeight === 'US 9') return category.price_1kg || 0;
+    if (selectedWeight === 'US 10') return category.price_1kg || 0;
+    if (selectedWeight === 'US 11') return category.price_1kg || 0;
     return 0;
   }, [selectedWeight, category]);
 
   // Compact sizes for real phone 2-column layout (~167px cards)
   const cardPad   = isPhone ? 8  : 14;
-  const barHeight = isPhone ? 22 : 32;
   const nameFz    = isPhone ? 14 : 24;
   const nameLineH = isPhone ? 18 : 28;
   const priceFz   = isPhone ? 12 : 20;
@@ -165,28 +168,9 @@ function CategoryCard({ category, cardWidth, currency, onAddToCart, isPhone }) {
   return (
     <View style={[styles.productCard, { width: cardWidth, padding: cardPad }]}>
       <View style={[styles.imageWrap, { width: cardWidth - cardPad * 2 }]}>
-        <View style={[styles.cardHeaderBar, { height: barHeight }]}>
-          <Text style={[styles.cardHeaderInscription, isPhone && { fontSize: 9 }]} numberOfLines={1} adjustsFontSizeToFit>
-            Johnny's Food And Meat Complex
-          </Text>
-        </View>
-
         <View style={styles.cardImageContainer}>
           <Image source={{ uri: category.image }} resizeMode="contain" style={styles.productImage} />
-          {category.tag ? (
-            <View style={styles.tagPill}>
-              <Text style={styles.tagText}>{category.tag}</Text>
-            </View>
-          ) : null}
         </View>
-
-        <View style={[styles.cardFooterBar, { height: barHeight }]} />
-
-        <Image
-          source={require('./assets/jfamco_logo.png')}
-          style={[styles.cardSignatureLogo, { width: Math.round(cardWidth * 0.28), height: Math.round(cardWidth * 0.28) }]}
-          resizeMode="contain"
-        />
       </View>
 
       <View style={[styles.rowBetween, { gap: 4 }]}>
@@ -264,9 +248,8 @@ const fallbackFooterSections = [
     section_key: 'aboutUs',
     title: 'ABOUT JFAMCO',
     footer_items: [
-      { id: 'f1', label: 'We specialize in the processing, packaging, and distribution of a wide range of fresh, hygienic, and organic meat products, proudly made in Ghana.', action_type: 'text', sort_order: 10 },
-      { id: 'f2', label: 'Whether you\'re a household, restaurant, caterer, retailer, or food service provider, we offer professional support and consistent meat supply to meet your needs.', action_type: 'text', sort_order: 20 },
-      { id: 'f3', label: 'Halal Certificate Seal', action_type: 'image', action_value: 'local', sort_order: 30 }
+      { id: 'f1', label: 'We specialize in the distribution of a wide range of quality products, proudly made in Ghana.', action_type: 'text', sort_order: 10 },
+      { id: 'f2', label: 'Whether you\'re a household, restaurant, caterer, retailer, or food service provider, we offer professional support and consistent supply to meet your needs.', action_type: 'text', sort_order: 20 }
     ]
   },
   {
@@ -416,13 +399,8 @@ export default function App() {
 
   const [dbFooterSections, setDbFooterSections] = useState(fallbackFooterSections);
 
-  const halalSealItem = dbFooterSections
-    ?.find(section => section.section_key === 'aboutUs')
-    ?.footer_items?.find(item => item.action_type === 'image');
-
-  const halalSealSource = halalSealItem?.action_value && halalSealItem.action_value !== 'local'
-    ? { uri: halalSealItem.action_value }
-    : require('./assets/halal_certificate_seal.png');
+  const halalSealItem = null;
+  const halalSealSource = null;
 
   // Admin order states
   const [adminOrders, setAdminOrders] = useState([]);
@@ -473,7 +451,7 @@ export default function App() {
     ]).start();
   }, [lift, reveal]);
 
-  const fetchFooterData = async () => {
+const fetchFooterData = async () => {
     try {
       const { data, error } = await supabase
         .from('footer_sections')
@@ -482,7 +460,7 @@ export default function App() {
           section_key,
           title,
           sort_order,
-          footer_items (
+          footer_items!footer_items_footer_section_id_fkey (
             id,
             label,
             action_type,
@@ -508,9 +486,11 @@ export default function App() {
     }
   };
 
-  const loadSupabaseData = async () => {
+  const loadSupabaseData = async (showLoading = true) => {
     fetchFooterData();
-    setCategoriesLoading(true);
+    if (showLoading) {
+      setCategoriesLoading(true);
+    }
     setCategoriesError('');
 
     let productData = [];
@@ -519,15 +499,25 @@ export default function App() {
     let catIdToNameMap = {};
     let catNameToId = {};
     let categoryNames = [];
+    let fetchError = null;
+
+    console.log('🔄 Starting product fetch from Supabase...');
+    console.log('Supabase URL configured:', !!process.env.EXPO_PUBLIC_SUPABASE_URL);
 
     // 1. Try querying Supabase directly
     try {
+      console.log('📡 Attempting direct Supabase query...');
       const [prodRes, catRes] = await Promise.all([
         supabase.from('products').select('*'),
         supabase.from('categories').select('*')
       ]);
       
-      if (prodRes.error) throw prodRes.error;
+      if (prodRes.error) {
+        console.error('❌ Products query error:', prodRes.error);
+        throw prodRes.error;
+      }
+      
+      console.log('✅ Products fetched from Supabase:', prodRes.data?.length || 0, 'products');
       
       if (catRes.data) {
         catRes.data.forEach(c => {
@@ -539,14 +529,19 @@ export default function App() {
           if (c.name) categoryNames.push(c.name);
         });
         setCatNameToIdMap(catNameToId);
+        console.log('📂 Categories loaded:', catRes.data.length);
       }
 
-      if (prodRes.data) {
+      if (prodRes.data && prodRes.data.length > 0) {
         productData = prodRes.data;
         success = true;
+        console.log('✅ Successfully loaded', productData.length, 'products from Supabase');
+      } else {
+        console.warn('⚠️ Supabase returned empty products table');
       }
     } catch (err) {
-      console.warn('Direct Supabase fetch failed. Trying proxy...', err.message);
+      console.error('❌ Direct Supabase fetch failed:', err.message);
+      fetchError = err.message;
       setCategoriesError('Supabase Error: ' + err.message);
       
       if (err.message?.includes('JWT') || err.message?.includes('expired')) {
@@ -557,19 +552,21 @@ export default function App() {
     // 2. Try proxy server if direct fetch failed
     if (!success) {
       try {
+        console.log('📡 Trying proxy server fallback...');
         const response = await fetch(`${LOCAL_API_BASE}/api/products`);
         if (response.ok) {
           productData = await response.json();
           success = true;
+          console.log('✅ Products fetched via proxy:', productData.length);
         } else {
           throw new Error(`Proxy status ${response.status}`);
         }
       } catch (error) {
-        console.warn('Proxy fetch failed.', error.message);
+        console.warn('⚠️ Proxy fetch failed:', error.message);
       }
     }
 
-    if (success && productData) {
+    if (success && productData && productData.length > 0) {
       const nextCards = productData
         .map(row => mapProductRowToCard(row, catNameToImageMap, catIdToNameMap))
         .filter((card) => card.name)
@@ -583,6 +580,7 @@ export default function App() {
         });
 
       setProductCards(nextCards);
+      console.log('✅ Displaying', nextCards.length, 'products from Supabase');
       
       // Extract chips from already-mapped cards using categoryLabel (safe, already normalised)
       const isValidCategory = (val) => {
@@ -605,13 +603,27 @@ export default function App() {
 
       const dynamicChips = ['All', ...Array.from(categoriesFromCards).sort()];
       setCategoryChips(dynamicChips.length > 1 ? dynamicChips : ['All', ...fallbackChips]);
+      
+      // Clear error since we successfully loaded from Supabase
+      setCategoriesError('');
     } else {
-      setCategoriesError(prev => prev ? prev : 'Could not connect to live database. Fallback active.');
+      // 3. Fall back to local data when Supabase fetch failed or returned empty
+      console.log('🔄 Falling back to local product data...');
+      const errorMsg = fetchError 
+        ? `Supabase unavailable: ${fetchError}. Showing fallback products.`
+        : 'No products in database. Showing fallback products.';
+      setCategoriesError(errorMsg);
       setProductCards(fallbackCategoryCards);
       setCategoryChips(['All', ...fallbackChips]);
+      console.log('✅ Displaying', fallbackCategoryCards.length, 'fallback products');
     }
 
     setCategoriesLoading(false);
+  };
+
+  // Manual refresh function for user to retry loading products
+  const refreshProducts = () => {
+    loadSupabaseData(true);
   };
 
   useEffect(() => {
@@ -656,10 +668,10 @@ export default function App() {
   }, []);
 
   const HERO_IMAGES = [
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuDLhsat6Rb5Dy4bDpFv6aWr1u3C-piCx_bejQP11cY7cFOwP9qL3dhqL5hEqDde_-UF3CSISBXekCqAISCXn9qM37EPip3Hof1nanVNoxkvnrZV1lYPaQhMTGer_yW7_Yzwyt7PTkB7XW3UKpLvYfnj_430oVwPUXtO7pGH-fGNIa2sQawwT3sAkbjkdK4OliYGWtxO-hCZqHzHPvJIKww7KVjcVTYA_Z_TBO4OIEFhIfEp3FheXXgzXlO2fXI2WnseejgPhN62rr8',
-    'https://images.unsplash.com/photo-1603048297172-c92544798d5e?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=1200&q=80'
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9ff?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=1200&q=80'
   ];
 
   const fetchCustomerOrders = async () => {
@@ -811,7 +823,7 @@ export default function App() {
         });
         if (error) throw error;
         setAuthModalVisible(false);
-        alert('Welcome to The Master\'s Circle! Your account has been created.');
+        alert('Welcome to JFAMCO! Your account has been created.');
       }
     } catch (err) {
       alert(err.message);
@@ -825,7 +837,7 @@ export default function App() {
     setCurrentPage('shop');
   };
 
-  const INTERESTS = ['Prime Steaks', 'Heritage Poultry', 'Wagyu Selections', 'Dry-Aged Specialties'];
+  const INTERESTS = [];
   const toggleInterest = (interest) => {
     setAuthInterests(prev => 
       prev.includes(interest) ? prev.filter(i => i !== interest) : [...prev, interest]
@@ -1235,9 +1247,8 @@ export default function App() {
   const MIN_CARD = 160;
   const GAP = 8;
   const PADDING = 8;
-
   const availableWidth = width - (PADDING * 2);
-  const columnCount = 2; // hardcoded — always 2 columns
+  const columnCount = 2; // 👈 hardcode this — no Math, no logic
   const cardWidth = (availableWidth - (GAP * (columnCount - 1))) / columnCount;
   const isCompactCard = cardWidth < 200;
   const isCompactAdmin = width < 760;
@@ -1410,11 +1421,6 @@ export default function App() {
 
       <View style={[styles.header, isPhoneScreen && { paddingHorizontal: 12 }]}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-          <Image
-            source={require('./assets/jfamco_logo.png')}
-            style={{ width: 44, height: 44, borderRadius: 22 }}
-            resizeMode="contain"
-          />
           <Text style={[styles.headerTitle, isPhoneScreen && { fontSize: 13, marginLeft: 0 }]}>
             {isPhoneScreen ? "Johnny's (Jfamco)" : "Johnny's Food And Meat Complex (Jfamco)"}
           </Text>
@@ -1489,7 +1495,7 @@ export default function App() {
                       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{gap: 12}}>
                         {order.order_items.map((item, idx) => {
                           const product = productCards.find(p => p.id === item.product_id);
-                          const imageUrl = product ? product.image : 'https://images.unsplash.com/photo-1603048297172-c92544798d5e?auto=format&fit=crop&w=200&q=80';
+                          const imageUrl = product ? product.image : 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=200&q=80';
                           return (
                             <View key={idx} style={{alignItems: 'center', width: 44}}>
                               <Image source={{uri: imageUrl}} style={{width: 44, height: 44, borderRadius: 22, backgroundColor: '#f5f5f5', borderWidth: 1, borderColor: 'rgba(0,0,0,0.05)'}} />
@@ -1532,7 +1538,7 @@ export default function App() {
           <View style={{ width: '100%', maxWidth: 420, backgroundColor: '#fff', borderTopWidth: 4, borderTopColor: palette.oxblood, padding: 36, shadowColor: '#000', shadowOffset: {width: 0, height: 8}, shadowOpacity: 0.08, shadowRadius: 24 }}>
 
             {/* Logo / Brand */}
-            <Text style={{ fontSize: 11, fontWeight: '700', letterSpacing: 3, color: palette.oxblood, marginBottom: 8 }}>THE MASTER'S CUT</Text>
+            <Text style={{ fontSize: 11, fontWeight: '700', letterSpacing: 3, color: palette.oxblood, marginBottom: 8 }}>JFAMCO</Text>
             <Text style={{ fontFamily: 'Georgia', fontSize: 28, fontWeight: '700', color: palette.charcoal, marginBottom: 4 }}>Admin Login</Text>
             <Text style={{ fontSize: 13, color: palette.secondary, marginBottom: 32, lineHeight: 20 }}>Sign in with your admin account to access the dashboard.</Text>
 
@@ -1582,7 +1588,7 @@ export default function App() {
         <View style={styles.adminDashboardLayout}>
           {/* SIDEBAR */}
           <View style={[styles.adminSidebar, isCompactAdmin && { display: 'none' }]}>
-            <Text style={styles.adminSidebarBrand}>The Master's Cut</Text>
+            <Text style={styles.adminSidebarBrand}>JFAMCO</Text>
             
             <View style={styles.adminProfileBlock}>
               <Pressable onPress={() => { setTempAvatarUrl(adminAvatarUrl); setAdminProfileModalVisible(true); }}>
@@ -1592,7 +1598,7 @@ export default function App() {
                 </View>
               </Pressable>
               <View style={styles.adminProfileInfo}>
-                <Text style={styles.adminProfileName}>Head Butcher</Text>
+                <Text style={styles.adminProfileName}>Administrator</Text>
                 <Text style={styles.adminProfileRole}>ADMIN ACCESS</Text>
               </View>
             </View>
@@ -1699,7 +1705,7 @@ export default function App() {
 
               <View style={styles.adminNewTable}>
                 <View style={[styles.adminNewTableHeader, isCompactAdmin && { display: 'none' }]}>
-                  <Text style={[styles.adminNewTableCol, {flex: 3}]}>PREMIUM CUT</Text>
+                  <Text style={[styles.adminNewTableCol, {flex: 3}]}>PRODUCT</Text>
                   <Text style={[styles.adminNewTableCol, {flex: 1}]}>CURRENT STOCK</Text>
                   <Text style={[styles.adminNewTableCol, {flex: 1}]}>STATUS</Text>
                   <Text style={[styles.adminNewTableCol, {flex: 0.5, textAlign: 'right'}]}>ACTION</Text>
@@ -1880,11 +1886,11 @@ export default function App() {
           />
           <View style={styles.heroOverlay} />
           <Animated.View style={[styles.heroTextWrap, { opacity: reveal, transform: [{ translateY: lift }] }]}>
-            <Text style={styles.kicker}>THE MASTER'S CUT</Text>
-            <Text style={styles.heroTitle}>Heritage Quality,{`\n`}Precision Carved.</Text>
+            <Text style={styles.kicker}>JFAMCO</Text>
+            <Text style={styles.heroTitle}>Quality Products,{`\n`}Delivered Fresh.</Text>
             <Text style={styles.heroBody}>
-              Transparency in provenance. Excellence in aging. The definitive collection for
-              the modern epicurean.
+              Transparency in sourcing. Excellence in quality. The definitive collection for
+              every household and business.
             </Text>
             <View style={styles.heroActionsRow}>
               <Pressable style={styles.heroBtn} onPress={() => setCurrentPage('shop')}>
@@ -1947,14 +1953,28 @@ export default function App() {
           );
         })()}
 
-        <View style={styles.searchWrap}>
-          <TextInput
-            value={search}
-            onChangeText={setSearch}
-            placeholder="Search category"
-            placeholderTextColor="#89726F"
-            style={styles.searchInput}
-          />
+<View style={styles.searchWrap}>
+          <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+            <TextInput
+              value={search}
+              onChangeText={setSearch}
+              placeholder="Search category"
+              placeholderTextColor="#89726F"
+              style={[styles.searchInput, {flex: 1}]}
+            />
+            <Pressable 
+              onPress={refreshProducts}
+              style={{
+                backgroundColor: palette.oxblood,
+                paddingHorizontal: 12,
+                paddingVertical: 12,
+                borderRadius: 4,
+              }}
+              accessibilityLabel="Refresh products"
+            >
+              <FontAwesome name="refresh" size={16} color="#fff" />
+            </Pressable>
+          </View>
         </View>
 
         <View style={[styles.productGrid, { paddingHorizontal: 8, rowGap: 8, columnGap: 8 }]}>
@@ -2016,22 +2036,11 @@ export default function App() {
               <View style={[styles.footerCol, { flex: 2, marginRight: 20 }]}>
                 <Text style={styles.footerColHeader}>ABOUT JFAMCO</Text>
                 <Text style={styles.footerAboutText}>
-                  We specialize in the processing, packaging, and distribution of a wide range of fresh, hygienic, and organic meat products, proudly made in Ghana.
+                  We specialize in the distribution of a wide range of quality products, proudly made in Ghana.
                 </Text>
                 <Text style={[styles.footerAboutText, { marginTop: 12 }]}>
-                  Whether you're a household, restaurant, caterer, retailer, or food service provider, we offer professional support and consistent meat supply to meet your needs.
+                  Whether you're a household, restaurant, caterer, retailer, or food service provider, we offer professional support and consistent supply to meet your needs.
                 </Text>
-              </View>
-
-              {/* Column 2: Halal Certification Banner */}
-              <View style={[styles.footerCol, { flex: 1.2, alignItems: 'center' }]}>
-                <View style={styles.halalBannerCard}>
-                  <Image
-                    source={halalSealSource}
-                    style={styles.halalSealImage}
-                    resizeMode="contain"
-                  />
-                </View>
               </View>
 
               {/* Column 3: Main Menu */}
@@ -2107,18 +2116,11 @@ export default function App() {
                 {expandedFooterSections.aboutUs && (
                   <View style={styles.accordionContent}>
                     <Text style={styles.footerAboutText}>
-                      We specialize in the processing, packaging, and distribution of a wide range of fresh, hygienic, and organic meat products, proudly made in Ghana.
+                      We specialize in the distribution of a wide range of quality products, proudly made in Ghana.
                     </Text>
                     <Text style={[styles.footerAboutText, { marginTop: 12, marginBottom: 16 }]}>
-                      Whether you're a household, restaurant, caterer, retailer, or food service provider, we offer professional support and consistent meat supply to meet your needs.
+                      Whether you're a household, restaurant, caterer, retailer, or food service provider, we offer professional support and consistent supply to meet your needs.
                     </Text>
-                    <View style={[styles.halalBannerCard, { alignSelf: 'center' }]}>
-                      <Image
-                        source={halalSealSource}
-                        style={styles.halalSealImage}
-                        resizeMode="contain"
-                      />
-                    </View>
                   </View>
                 )}
               </View>
@@ -2666,11 +2668,11 @@ export default function App() {
               </View>
 
               <View style={{ gap: 4 }}>
-                <Text style={{ fontSize: 11, fontWeight: '700', color: palette.secondary, letterSpacing: 0.8 }}>TAG / LABEL (E.g. Dry-Aged 30 Days)</Text>
+                <Text style={{ fontSize: 11, fontWeight: '700', color: palette.secondary, letterSpacing: 0.8 }}>TAG / LABEL (E.g. Best Seller)</Text>
                 <TextInput
                   value={newProduct.tag}
                   onChangeText={(txt) => setNewProduct({ ...newProduct, tag: txt })}
-                  placeholder="e.g. Dry-Aged 45 Days"
+                  placeholder="e.g. Best Seller"
                   placeholderTextColor="#89726F"
                   style={styles.adminLoginInput}
                 />
@@ -2865,7 +2867,7 @@ export default function App() {
                   <TextInput
                     value={editingProduct.tag}
                     onChangeText={(txt) => setEditingProduct({ ...editingProduct, tag: txt })}
-                    placeholder="e.g. Dry-Aged 45 Days"
+                    placeholder="e.g. Best Seller"
                     placeholderTextColor="#89726F"
                     style={styles.adminLoginInput}
                   />
@@ -2959,31 +2961,18 @@ export default function App() {
                 <Text style={{ fontSize: 24, color: palette.charcoal, fontWeight: '300' }}>✕</Text>
               </Pressable>
               <Text style={{ fontFamily: 'Georgia', fontSize: 32, fontWeight: '700', color: palette.oxblood, marginLeft: 36, lineHeight: 34 }}>
-                The Master's{'\n'}Cut
+                JFAMCO
               </Text>
             </View>
 
-            {/* Hero Image Section */}
-            <View style={{ position: 'relative' }}>
-              <View style={{ height: 160, position: 'relative' }}>
-                <Image 
-                  source={{ uri: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80' }} 
-                  style={{ width: '100%', height: '100%' }}
-                  resizeMode="cover"
-                />
-                <View style={{
-                  ...StyleSheet.absoluteFillObject,
-                  backgroundColor: 'rgba(250, 249, 249, 0.25)',
-                }} />
-              </View>
-              <View style={{ paddingHorizontal: 24, paddingTop: 16, paddingBottom: 12, backgroundColor: '#FAFAFA' }}>
-                <Text style={{ fontFamily: 'Georgia', fontSize: 25, fontWeight: '700', color: palette.oxblood, lineHeight: 28 }}>
-                  Begin Your Heritage{'\n'}Journey
-                </Text>
-                <Text style={{ fontSize: 13, color: palette.secondary, marginTop: 6, lineHeight: 18 }}>
-                  Join the Master's Circle for exclusive access to the season's finest cuts and artisanal provenance.
-                </Text>
-              </View>
+            {/* Header Info */}
+            <View style={{ paddingHorizontal: 24, paddingTop: 16, paddingBottom: 12, backgroundColor: '#FAFAFA' }}>
+              <Text style={{ fontFamily: 'Georgia', fontSize: 25, fontWeight: '700', color: palette.oxblood, lineHeight: 28 }}>
+                {isLoginMode ? 'Welcome Back' : 'Create an Account'}
+              </Text>
+              <Text style={{ fontSize: 13, color: palette.secondary, marginTop: 6, lineHeight: 18 }}>
+                {isLoginMode ? 'Sign in to access your orders and account.' : 'Join JFAMCO for a seamless shopping experience.'}
+              </Text>
             </View>
 
             <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 48 }} showsVerticalScrollIndicator={false}>
@@ -3046,34 +3035,6 @@ export default function App() {
                   }}
                 />
               </View>
-
-              {/* Interests — sign up only */}
-              {!isLoginMode && (
-                <View style={{ marginBottom: 28 }}>
-                  <Text style={{ fontSize: 13, fontWeight: '700', color: palette.charcoal, marginBottom: 12, letterSpacing: 0.5 }}>Interest Profile</Text>
-                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-                    {INTERESTS.map(interest => {
-                      const selected = authInterests.includes(interest);
-                      return (
-                        <Pressable
-                          key={interest}
-                          onPress={() => toggleInterest(interest)}
-                          style={{
-                            paddingHorizontal: 16,
-                            paddingVertical: 8,
-                            borderRadius: 20,
-                            borderWidth: 1,
-                            borderColor: selected ? palette.oxblood : '#DDD',
-                            backgroundColor: selected ? palette.oxblood : '#FFF',
-                          }}
-                        >
-                          <Text style={{ fontSize: 12, fontWeight: '500', color: selected ? '#FFF' : palette.charcoal }}>{interest}</Text>
-                        </Pressable>
-                      );
-                    })}
-                  </View>
-                </View>
-              )}
 
               {/* Submit Button */}
               <Pressable
@@ -3361,12 +3322,8 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   productGrid: {
-    paddingHorizontal: 16,
-    paddingTop: 14,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    rowGap: 22,
-    columnGap: 14,
   },
   productCard: {
     backgroundColor: palette.surface,
@@ -3394,23 +3351,6 @@ const styles = StyleSheet.create({
     left: 8,
     // width/height driven by inline style relative to cardWidth
   },
-  cardHeaderBar: {
-    height: 32,
-    flexShrink: 0,
-    backgroundColor: '#A2BF37',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    paddingHorizontal: 8,
-  },
-  cardHeaderInscription: {
-    color: '#FFF',
-    fontSize: 12,
-    fontWeight: '800',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-    textAlign: 'center',
-  },
   cardImageContainer: {
     flex: 1,
     backgroundColor: '#FFF',
@@ -3418,27 +3358,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     position: 'relative',
-  },
-  cardFooterBar: {
-    height: 32,
-    flexShrink: 0,
-    backgroundColor: '#A2BF37',
-    width: '100%',
-  },
-  tagPill: {
-    position: 'absolute',
-    top: 10,
-    left: 10,
-    backgroundColor: palette.oxblood,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-  },
-  tagText: {
-    color: '#fff',
-    fontSize: 10,
-    letterSpacing: 0.6,
-    textTransform: 'uppercase',
-    fontWeight: '700',
   },
   rowBetween: {
     flexDirection: 'row',

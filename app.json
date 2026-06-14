@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "JFAMCO",
-    "slug": "jfamco",
+    "name": "StepVault",
+    "slug": "StepVault",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,9 +19,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "name": "JFAMCO",
-      "shortName": "JFAMCO",
-      "description": "Johnny's Food And Meat Complex — Fresh, Quality Meat"
+      "name": "StepVault",
+      "shortName": "StepVault",
+      "description": "Johnny's Food And Meat Complex — Premium Branded Footwear"
     }
   }
 }
