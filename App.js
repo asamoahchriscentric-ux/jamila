@@ -210,7 +210,7 @@ function CategoryCard({ category, cardWidth, currency, onAddToCart, onRemoveFrom
               >
                 <FontAwesome 
                   name="shopping-cart" 
-                  size={isPhone ? 16 : 22} 
+                  size={isPhone ? 14 : 20} 
                   color={isSelected ? '#FFF' : palette.oxblood}
                 />
               </Pressable>
@@ -3521,11 +3521,11 @@ const styles = StyleSheet.create({
   cartIconSquare: {
     position: 'absolute',
     top: 8,
-    left: 8,
+    left: 4,
     backgroundColor: '#FFFFFF',
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
