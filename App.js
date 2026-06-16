@@ -16,7 +16,7 @@ import {
   Linking,
 } from 'react-native';
 import { supabase } from './lib/supabase';
-import CarouselComponent from './components/CarouselComponent';
+import PromoBannerStrip from './components/PromoBannerStrip';
 import ProductDetail from './components/ProductDetail';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 
@@ -143,7 +143,7 @@ const mapProductRowToCard = (row, catNameToImageMap = {}, catIdToNameMap = {}) =
     description: row.description ?? row.details ?? row.metadata?.description ?? '',
     position: row.position ?? 0,
     image:
-      row.image_url || row.image || row.photo_url || row.metadata?.image_url || catNameToImageMap[catName] || DEFAULT_CATEGORY_IMAGE,
+      row.url || row.image_url || row.image || row.photo_url || row.metadata?.image_url || catNameToImageMap[catName] || DEFAULT_CATEGORY_IMAGE,
     stock_quantity: row.stock_quantity ?? 0,
     product_images: row.product_images || [], // ✅ Add product_images array
   };
@@ -549,17 +549,15 @@ const fetchFooterData = async () => {
       // First, try with product_images
       let prodRes = await supabase.from('products').select(`
         *,
-        product_images (
-          id,
-          image_url,
-          position
-        )
+        product_images (url, position)
       `);
       
       console.log('🔍 Raw prodRes:', { 
         hasError: !!prodRes.error, 
         dataLength: prodRes.data?.length,
-        errorMessage: prodRes.error?.message 
+        errorMessage: prodRes.error?.message,
+        firstProduct: prodRes.data?.[0],
+        firstProductImages: prodRes.data?.[0]?.product_images
       });
       // If product_images table doesn't exist, fallback to simple query
       if (prodRes.error && prodRes.error.message?.includes('product_images')) {
@@ -748,18 +746,23 @@ const fetchFooterData = async () => {
     setCustomerOrdersLoading(true);
     
     try {
-      // Fetch orders with order_items and product details
+      // Fetch orders with order_items, products, and product_images
       const { data, error } = await supabase
         .from('orders')
         .select(`
           *,
           order_items (
-            *,
+            id,
+            product_id,
+            product_name,
+            quantity,
+            unit_price,
+            line_total,
             products (
               id,
               name,
-              image_url,
-              description
+              url,
+              product_images (url, position)
             )
           )
         `)
@@ -779,12 +782,16 @@ const fetchFooterData = async () => {
         return {
           ...order,
           order_items: (order.order_items || []).map(item => {
+            // Get first product image from product_images array
+            const firstProductImage = item.products?.product_images?.[0]?.url;
+            const fallbackImage = item.products?.url || item.products?.image_url;
+            
             const productInfo = {
               ...item,
-              product_name: item.products?.name || 'Product',
-              product_image: item.products?.image_url || null
+              product_name: item.product_name || item.products?.name || 'Product',  // Use stored name first
+              product_image: firstProductImage || fallbackImage || null
             };
-            console.log('  - Item:', productInfo.product_name, 'Qty:', item.quantity);
+            console.log('  - Item:', productInfo.product_name, 'Qty:', item.quantity, 'Image:', productInfo.product_image ? '✅' : '❌');
             return productInfo;
           })
         };
@@ -864,18 +871,23 @@ const fetchFooterData = async () => {
       const newOrderId = orderData[0].id;
       console.log('✅ Order created:', newOrderId);
 
-      // 2. Insert order items
+      // 2. Insert order items with product snapshot data
       console.log('📦 Adding order items...');
-      const orderItemsToInsert = cartItems.map((item) => ({
-        order_id: newOrderId,
-        product_id: item.id.toString().startsWith('prod-') ? null : item.id,
-        selected_weight: item.selectedWeight,
-        unit_price: item.unitPrice,
-        quantity: item.quantity,
-        line_total: item.lineTotal,
-      }));
+      const orderItemsToInsert = cartItems.map((item) => {
+        console.log('Cart item:', JSON.stringify(item));
+        return {
+          order_id: newOrderId,
+          product_id: item.id.toString().startsWith('prod-') ? null : item.id,
+          product_name: item.name,  // ✅ Snapshot product name at order time
+          unit_price: item.unitPrice,
+          quantity: item.quantity,
+          line_total: item.lineTotal,
+          // Product images come from product_images table via join (not stored here)
+        };
+      });
 
       console.log('  Items to insert:', orderItemsToInsert.length);
+      console.log('  Order items data:', JSON.stringify(orderItemsToInsert, null, 2));
       const { error: itemsError } = await supabase.from('order_items').insert(orderItemsToInsert);
       if (itemsError) {
         console.error('❌ Error inserting order items:', itemsError);
@@ -2079,7 +2091,19 @@ const fetchFooterData = async () => {
           </View>
         </View>
 
-        <CarouselComponent />
+        <PromoBannerStrip 
+          onBannerPress={(banner) => {
+            console.log('Banner clicked:', banner.title);
+            // You can add navigation or open product detail here
+            if (banner.product_id) {
+              const product = productCards.find(p => p.id === banner.product_id);
+              if (product) {
+                setSelectedProduct(product);
+                setProductDetailVisible(true);
+              }
+            }
+          }}
+        />
 
         {(() => {
           const chips = categoryChips.map((cat) => {
@@ -2208,7 +2232,7 @@ const fetchFooterData = async () => {
           style={[styles.navItem, currentPage === 'shop' && styles.navActive]}
           onPress={() => setCurrentPage('shop')}
         >
-          <FontAwesome name="home" size={20} color={currentPage === 'shop' ? palette.oxblood : '#888'} />
+          <FontAwesome name="home" size={20} color={currentPage === 'shop' ? '#28A745' : '#FFFFFF'} />
           <Text style={[styles.navLabel, currentPage === 'shop' && styles.navLabelActive]}>Shop</Text>
         </Pressable>
 
@@ -2217,7 +2241,7 @@ const fetchFooterData = async () => {
           style={[styles.navItem, cartModalVisible && styles.navActive]}
           onPress={openCart}
         >
-          <FontAwesome name="shopping-cart" size={20} color={cartModalVisible ? palette.oxblood : '#888'} />
+          <FontAwesome name="shopping-cart" size={20} color={cartModalVisible ? '#28A745' : '#FFFFFF'} />
           <Text style={[styles.navLabel, cartModalVisible && styles.navLabelActive]}>Cart</Text>
         </Pressable>
 
@@ -2234,7 +2258,7 @@ const fetchFooterData = async () => {
             }
           }}
         >
-          <FontAwesome name="user" size={20} color={userAccountSheetVisible ? palette.oxblood : '#888'} />
+          <FontAwesome name="user" size={20} color={userAccountSheetVisible ? '#28A745' : '#FFFFFF'} />
           <Text style={[styles.navLabel, userAccountSheetVisible && styles.navLabelActive]}>
             {user ? 'Account' : 'Sign In'}
           </Text>
@@ -4212,7 +4236,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: '#EFEDED',
+    backgroundColor: '#28A745',
     paddingVertical: 8,
     paddingHorizontal: 8,
     flexDirection: 'row',
@@ -4227,24 +4251,24 @@ const styles = StyleSheet.create({
     borderRadius: 999,
   },
   navActive: {
-    backgroundColor: '#4A0404',
+    backgroundColor: '#FFFFFF',
   },
   navIcon: {
-    color: '#636263',
+    color: '#FFFFFF',
     fontSize: 11,
     fontWeight: '700',
     marginBottom: 2,
   },
   navIconActive: {
-    color: '#fff',
+    color: '#28A745',
   },
   navLabel: {
-    color: '#636263',
+    color: '#FFFFFF',
     fontSize: 10,
     fontWeight: '700',
   },
   navLabelActive: {
-    color: '#fff',
+    color: '#28A745',
   },
 
   adminDashboardLayout: {

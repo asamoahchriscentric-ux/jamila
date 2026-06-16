@@ -62,8 +62,8 @@ export default function ProductDetail({ product, visible, onClose, onAddToCart }
     
     const finalImages = product.product_images?.length > 0 
       ? product.product_images
-          .map(img => img.image_url?.trim() || img.image_url) // Trim whitespace/newlines
-          .filter(url => !url.includes('unsplash.com')) // ✅ Remove mock Unsplash images
+          .map(img => (img.url || img.image_url)?.trim()) // Use url column (fallback to image_url)
+          .filter(url => url && !url.includes('unsplash.com')) // ✅ Remove mock Unsplash images
       : product.image 
       ? [product.image] 
       : ['https://via.placeholder.com/600x600?text=No+Image'];

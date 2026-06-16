@@ -40,3 +40,6 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Backup folder (for local use only)
+osebo-shoes-backup/
