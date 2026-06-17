@@ -122,7 +122,7 @@ export default function ProductDetail({ product, visible, onClose, onAddToCart }
   };
 
   const handleAddToCartClick = () => {
-    if (!product.stock_quantity || product.stock_quantity === 0) {
+    if (product.stock_quantity === 0) {
       Alert.alert('Out of Stock', 'This product is currently unavailable');
       return;
     }
@@ -243,7 +243,7 @@ export default function ProductDetail({ product, visible, onClose, onAddToCart }
                 GHC {typeof product.price === 'number' ? product.price.toFixed(2) : product.price}
               </Text>
 
-              {product.stock_quantity !== undefined && (
+              {product.stock_quantity !== undefined && product.stock_quantity !== null && (
                 <Text style={styles.stock}>
                   {product.stock_quantity > 0 
                     ? `${product.stock_quantity} in stock`
@@ -302,14 +302,14 @@ export default function ProductDetail({ product, visible, onClose, onAddToCart }
                   <Pressable
                     style={[
                       styles.initialAddToCartButton,
-                      (!product.stock_quantity || product.stock_quantity === 0) && styles.initialAddToCartButtonDisabled
+                      product.stock_quantity === 0 && styles.initialAddToCartButtonDisabled
                     ]}
                     onPress={handleAddToCartClick}
-                    disabled={!product.stock_quantity || product.stock_quantity === 0}
+                    disabled={product.stock_quantity === 0}
                   >
                     <FontAwesome name="shopping-cart" size={18} color="#FFF" />
                     <Text style={styles.initialAddToCartText}>
-                      {(!product.stock_quantity || product.stock_quantity === 0) 
+                      {product.stock_quantity === 0
                         ? 'Out of Stock' 
                         : 'Add to Cart'}
                     </Text>
@@ -334,7 +334,7 @@ export default function ProductDetail({ product, visible, onClose, onAddToCart }
                   </View>
                 )}
                 
-                {product.stock_quantity !== undefined && (
+                {product.stock_quantity !== undefined && product.stock_quantity !== null && (
                   <Text style={styles.stockInfo}>
                     {product.stock_quantity > 0 
                       ? `${product.stock_quantity} available`
@@ -356,14 +356,14 @@ export default function ProductDetail({ product, visible, onClose, onAddToCart }
             <Pressable
               style={[
                 styles.addToCartButton,
-                (!showQuantityControls || !product.stock_quantity || product.stock_quantity === 0) && styles.addToCartButtonDisabled
+                (!showQuantityControls || product.stock_quantity === 0) && styles.addToCartButtonDisabled
               ]}
               onPress={() => {
                 if (!showQuantityControls) {
                   Alert.alert('Select Quantity', 'Please click "Add to Cart" button first to select quantity');
                   return;
                 }
-                if (!product.stock_quantity || product.stock_quantity === 0) {
+                if (product.stock_quantity === 0) {
                   Alert.alert('Out of Stock', 'This product is currently unavailable');
                   return;
                 }
@@ -372,11 +372,11 @@ export default function ProductDetail({ product, visible, onClose, onAddToCart }
                 setQuantity(1); // Reset quantity
                 onClose();
               }}
-              disabled={!showQuantityControls || !product.stock_quantity || product.stock_quantity === 0}
+              disabled={!showQuantityControls || product.stock_quantity === 0}
             >
               <FontAwesome name="shopping-cart" size={20} color="#FFF" />
               <Text style={styles.addToCartText}>
-                {(!product.stock_quantity || product.stock_quantity === 0) 
+                {product.stock_quantity === 0
                   ? 'Out of Stock' 
                   : showQuantityControls 
                     ? `Add ${quantity} to Cart • GHC ${totalPrice.toFixed(2)}`
