@@ -378,7 +378,22 @@ export default function ProductDetail({ product, visible, onClose, onAddToCart }
                   Alert.alert('Out of Stock', 'This product is currently unavailable');
                   return;
                 }
-                onAddToCart?.(product, product.hasWeights ? selectedWeight : 'unit', currentPrice, quantity);
+                
+                // Ensure product has image field (might be in product_images array)
+                const productWithImage = {
+                  ...product,
+                  image: product.image || product.product_images?.[0]?.url || product.product_images?.[0]?.image_url || 'https://via.placeholder.com/600x600?text=No+Image'
+                };
+                
+                onAddToCart?.(productWithImage, product.hasWeights ? selectedWeight : 'unit', currentPrice, quantity);
+                
+                // Show success feedback
+                Alert.alert(
+                  'Added to Cart', 
+                  `${quantity} × ${product.name} added to your cart`,
+                  [{ text: 'OK' }]
+                );
+                
                 onClose(); // useEffect will reset state when modal closes
               }}
               disabled={!showQuantityControls || product.stock_quantity === 0}
