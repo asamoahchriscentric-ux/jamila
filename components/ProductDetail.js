@@ -27,7 +27,7 @@ const palette = {
   vault: '#202222',
 };
 
-export default function ProductDetail({ product, visible, onClose, onAddToCart }) {
+export default function ProductDetail({ product, visible, onClose, onAddToCart, cartItems = [] }) {
   const { width, height } = useWindowDimensions();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -38,13 +38,45 @@ export default function ProductDetail({ product, visible, onClose, onAddToCart }
   // Reset state when product changes or modal opens/closes
   useEffect(() => {
     if (visible && product) {
-      // Reset to initial state when opening modal with a product
-      setShowQuantityControls(false);
-      setQuantity(1);
+      const defaultWeight = 'US 9';
+      // Check if this product (with selected weight) is already in cart
+      const cartItem = cartItems.find(
+        (item) => item.id === product.id && item.selectedWeight === (product.hasWeights ? defaultWeight : 'unit')
+      );
+      
+      if (cartItem) {
+        // Product is in cart - show quantity controls with cart quantity
+        setShowQuantityControls(true);
+        setQuantity(cartItem.quantity);
+      } else {
+        // Product not in cart - show "Add to Cart" button
+        setShowQuantityControls(false);
+        setQuantity(1);
+      }
+      
+      // Reset other states
       setSelectedImageIndex(0);
-      setSelectedWeight('US 9');
+      setSelectedWeight(defaultWeight);
     }
-  }, [visible, product?.id]); // Reset when visibility changes or product ID changes
+  }, [visible, product?.id, cartItems]); // Also watch cartItems for updates
+
+  // Update quantity when weight/size changes
+  useEffect(() => {
+    if (visible && product) {
+      const cartItem = cartItems.find(
+        (item) => item.id === product.id && item.selectedWeight === (product.hasWeights ? selectedWeight : 'unit')
+      );
+      
+      if (cartItem) {
+        // This weight is in cart - show controls with cart quantity
+        setShowQuantityControls(true);
+        setQuantity(cartItem.quantity);
+      } else if (showQuantityControls) {
+        // This weight is NOT in cart but controls are showing - reset to 1
+        setQuantity(1);
+      }
+    }
+  }, [selectedWeight]); // Watch for weight changes
 
   // Calculate current price based on weight selection - MUST be before early return
   const currentPrice = useMemo(() => {
@@ -379,6 +411,11 @@ export default function ProductDetail({ product, visible, onClose, onAddToCart }
                   return;
                 }
                 
+                // Check if item is already in cart
+                const existingCartItem = cartItems.find(
+                  (item) => item.id === product.id && item.selectedWeight === (product.hasWeights ? selectedWeight : 'unit')
+                );
+                
                 // Ensure product has image field (might be in product_images array)
                 const productWithImage = {
                   ...product,
@@ -389,8 +426,10 @@ export default function ProductDetail({ product, visible, onClose, onAddToCart }
                 
                 // Show success feedback
                 Alert.alert(
-                  'Added to Cart', 
-                  `${quantity} × ${product.name} added to your cart`,
+                  existingCartItem ? 'Cart Updated' : 'Added to Cart', 
+                  existingCartItem 
+                    ? `${product.name} quantity updated to ${quantity}`
+                    : `${quantity} × ${product.name} added to your cart`,
                   [{ text: 'OK' }]
                 );
                 
@@ -402,9 +441,16 @@ export default function ProductDetail({ product, visible, onClose, onAddToCart }
               <Text style={styles.addToCartText}>
                 {product.stock_quantity === 0
                   ? 'Out of Stock' 
-                  : showQuantityControls 
-                    ? `Add ${quantity} to Cart • GHC ${totalPrice.toFixed(2)}`
-                    : 'Select Quantity First'}
+                  : !showQuantityControls
+                    ? 'Select Quantity First'
+                    : (() => {
+                        const existingCartItem = cartItems.find(
+                          (item) => item.id === product.id && item.selectedWeight === (product.hasWeights ? selectedWeight : 'unit')
+                        );
+                        return existingCartItem 
+                          ? `Update Cart (${quantity}) • GHC ${totalPrice.toFixed(2)}`
+                          : `Add ${quantity} to Cart • GHC ${totalPrice.toFixed(2)}`;
+                      })()}
               </Text>
             </Pressable>
           </View>

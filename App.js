@@ -3276,6 +3276,7 @@ const fetchFooterData = async () => {
         onAddToCart={(product, selectedWeight, itemPrice, quantity) => {
           addToCart(product, selectedWeight, itemPrice, quantity);
         }}
+        cartItems={cartItems}
       />
     </SafeAreaView>
   );
