@@ -19,6 +19,7 @@ import { supabase } from './lib/supabase';
 import PromoBannerStrip from './components/PromoBannerStrip';
 import ProductDetail from './components/ProductDetail';
 import DeliveryTracker from './components/DeliveryTracker';
+import SendToDriverButton from './components/SendToDriverButton';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 
 
@@ -2028,9 +2029,9 @@ const fetchFooterData = async () => {
                     <View>
                       <Text style={styles.adminOrderCardId}>{order.id}</Text>
                       <View style={{flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 4}}>
-                        <Text style={styles.adminOrderCardUser}>{order.metadata?.customer_name || 'Guest'}</Text>
+                        <Text style={styles.adminOrderCardUser}>{order.metadata?.customer_name || order.customer_name || 'Guest'}</Text>
                         <Pressable onPress={() => {
-                          const phone = order.metadata?.customer_phone || '+233240000000';
+                          const phone = order.metadata?.customer_phone || order.customer_phone || '+233240000000';
                           let waPhone = phone.replace(/[^0-9]/g, '');
                           if (waPhone.startsWith('0')) {
                             waPhone = '233' + waPhone.substring(1);
@@ -2044,7 +2045,7 @@ const fetchFooterData = async () => {
                         </Pressable>
                       </View>
                       <Text style={styles.adminOrderCardMeta}>
-                        {(order.order_items?.length || 1)} Item{(order.order_items?.length !== 1) ? 's' : ''} • Pickup
+                        {(order.order_items?.length || 1)} Item{(order.order_items?.length !== 1) ? 's' : ''} • {order.delivery_address || order.metadata?.delivery_address || 'No address'}
                       </Text>
                     </View>
                     <View style={{alignItems: 'flex-end'}}>
@@ -2075,6 +2076,35 @@ const fetchFooterData = async () => {
                         {formatCurrency(order.total || 0)}
                       </Text>
                     </View>
+                    
+                    {/* Send to Driver Button - Only show for Processing/Delivery orders */}
+                    {(String(order.status).toLowerCase() === 'processing' || String(order.status).toLowerCase() === 'delivery') && (
+                      <View style={{marginTop: 12, width: '100%'}}>
+                        <SendToDriverButton
+                          order={{
+                            id: order.id,
+                            customer_name: order.metadata?.customer_name || order.customer_name || 'Customer',
+                            customer_phone: order.metadata?.customer_phone || order.customer_phone || '',
+                            customer_email: order.customer_email || '',
+                            total: order.total || 0,
+                            payment_method: order.payment_method || 'Cash on Delivery',
+                            order_items: order.order_items || [],
+                          }}
+                          deliveryInfo={{
+                            address: order.delivery_address || order.metadata?.delivery_address || 'Address not provided',
+                            latitude: order.delivery_latitude || 5.6037,
+                            longitude: order.delivery_longitude || -0.1870,
+                            distance: order.delivery_distance || null,
+                            estimatedTime: order.estimated_time || null,
+                          }}
+                          driverPhone="+233241234567"
+                          onSent={(phone, link) => {
+                            console.log('WhatsApp message sent for order:', order.id);
+                            // Optional: Update order in database to track that message was sent
+                          }}
+                        />
+                      </View>
+                    )}
                   </View>
                 ))}
               </View>
