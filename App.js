@@ -18,6 +18,7 @@ import {
 import { supabase } from './lib/supabase';
 import PromoBannerStrip from './components/PromoBannerStrip';
 import ProductDetail from './components/ProductDetail';
+import DeliveryTracker from './components/DeliveryTracker';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 
 
@@ -408,6 +409,10 @@ export default function App() {
   const [orderSuccessModalVisible, setOrderSuccessModalVisible] = useState(false);
   const [lastCreatedOrderId, setLastCreatedOrderId] = useState('');
   const [localOrders, setLocalOrders] = useState([]);
+  
+  // Delivery Tracking State
+  const [deliveryTrackingVisible, setDeliveryTrackingVisible] = useState(false);
+  const [trackingOrderId, setTrackingOrderId] = useState(null);
   
   // Admin Profile State
   const [adminAvatarUrl, setAdminAvatarUrl] = useState('https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=150&q=80');
@@ -1725,6 +1730,32 @@ const fetchFooterData = async () => {
                       </ScrollView>
                     </View>
                   )}
+                  
+                  {/* Track Delivery Button */}
+                  {(order.status === 'Processing' || order.status === 'Shipped' || order.status === 'Delivered') && (
+                    <Pressable
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: palette.oxblood,
+                        paddingVertical: 8,
+                        paddingHorizontal: 12,
+                        borderRadius: 6,
+                        marginTop: 10,
+                        gap: 8
+                      }}
+                      onPress={() => {
+                        setTrackingOrderId(order.id);
+                        setDeliveryTrackingVisible(true);
+                      }}
+                    >
+                      <FontAwesome5 name="truck" size={12} color="#fff" />
+                      <Text style={{color: '#fff', fontSize: 11, fontWeight: '700', letterSpacing: 0.8}}>
+                        TRACK DELIVERY
+                      </Text>
+                    </Pressable>
+                  )}
                 </View>
               ))
             ) : (
@@ -2505,6 +2536,28 @@ const fetchFooterData = async () => {
                 {lastCreatedOrderId}
               </Text>
             </View>
+
+            {/* Track Delivery Button */}
+            <Pressable 
+              onPress={() => {
+                setTrackingOrderId(lastCreatedOrderId);
+                setDeliveryTrackingVisible(true);
+                setOrderSuccessModalVisible(false);
+              }}
+              style={{ 
+                backgroundColor: palette.oxblood, 
+                width: '100%', 
+                paddingVertical: 13, 
+                alignItems: 'center',
+                marginBottom: 10,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                gap: 10
+              }}
+            >
+              <FontAwesome5 name="truck" size={16} color="#fff" />
+              <Text style={{ color: '#fff', fontWeight: '700', fontSize: 12, letterSpacing: 1.4 }}>TRACK MY DELIVERY</Text>
+            </Pressable>
 
             <Pressable 
               onPress={() => {
@@ -3318,6 +3371,20 @@ const fetchFooterData = async () => {
         }}
         cartItems={cartItems}
       />
+
+      {/* DELIVERY TRACKING MODAL */}
+      <Modal 
+        visible={deliveryTrackingVisible} 
+        animationType="slide"
+        onRequestClose={() => setDeliveryTrackingVisible(false)}
+      >
+        <DeliveryTracker
+          orderId={trackingOrderId}
+          storeLat={5.6037}  // Osebo-Shoes main store coordinates - UPDATE WITH YOUR ACTUAL STORE LOCATION
+          storeLng={-0.1870}
+          onClose={() => setDeliveryTrackingVisible(false)}
+        />
+      </Modal>
     </SafeAreaView>
   );
 }
