@@ -3700,13 +3700,16 @@ const fetchFooterData = async () => {
 
   const availableWidth = width - (PADDING * 2);
 
-  const columnCount = width >= 1200 ? 6
+  const columnCount = width >= 1800 ? 9
+    : width >= 1600 ? 8
+    : width >= 1400 ? 7
+    : width >= 1200 ? 6
     : width >= 900 ? 5
     : width >= 650 ? 4
     : width >= 450 ? 3
     : 2;
 
-  const cardWidth = Math.min(220, (availableWidth - (GAP * (columnCount - 1))) / columnCount);
+  const cardWidth = (availableWidth - (GAP * (columnCount - 1))) / columnCount;
 
   const isCompactCard = cardWidth < 200;
 
