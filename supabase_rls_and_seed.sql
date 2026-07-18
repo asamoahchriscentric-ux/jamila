@@ -118,16 +118,16 @@ on conflict do nothing;
 -- Categories
 -- ─────────────────────────────────────────────────────────────
 insert into public.categories (name, image_url, description) values
-  ('Sneakers',  'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9ff?auto=format&fit=crop&w=900&q=80', 'Casual and athletic sneakers for everyday wear'),
-  ('Boots',     'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&w=900&q=80', 'Rugged and stylish boots for all occasions'),
-  ('Sandals',   'https://images.unsplash.com/photo-1603487742131-41651ecf9d5f?auto=format&fit=crop&w=900&q=80', 'Comfortable open-toe sandals for warm weather'),
-  ('Heels',     'https://images.unsplash.com/photo-1543163521-1bf539e0cf6d?auto=format&fit=crop&w=900&q=80', 'Elegant heels for formal and semi-formal occasions'),
-  ('Loafers',   'https://images.unsplash.com/photo-1533867617858-e611d85c33c9?auto=format&fit=crop&w=900&q=80', 'Slip-on loafers blending comfort with sophistication'),
-  ('Athletic',  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80', 'High-performance footwear for sports and training'),
-  ('Formal',    'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&w=900&q=80', 'Classic formal shoes for the office and special events'),
-  ('Casual',    'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=900&q=80', 'Laid-back everyday casual shoes'),
-  ('Slippers',  'https://images.unsplash.com/photo-1603487742131-41651ecf9d5f?auto=format&fit=crop&w=900&q=80', 'Cosy indoor and outdoor slippers'),
-  ('Running',   'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=900&q=80', 'Lightweight shoes built for speed and endurance')
+  ('Shirts',    'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=900&q=80', 'Stylish shirts for every occasion'),
+  ('Trousers',  'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=900&q=80', 'Comfortable and stylish trousers'),
+  ('Jackets',   'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=900&q=80', 'Premium jackets for all seasons'),
+  ('Suits',     'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=900&q=80', 'Elegant suits for formal occasions'),
+  ('Dresses',   'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=900&q=80', 'Beautiful dresses for women'),
+  ('Sportswear','https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=80', 'High-performance athletic wear'),
+  ('Casual',    'https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=900&q=80', 'Laid-back everyday casual wear'),
+  ('Traditional','https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=900&q=80', 'Authentic traditional African wear'),
+  ('Accessories','https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=900&q=80', 'Premium accessories to complete your look'),
+  ('Footwear',  'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=900&q=80', 'Quality shoes and sandals')
 on conflict do nothing;
 
 -- ─────────────────────────────────────────────────────────────
@@ -175,7 +175,7 @@ on conflict do nothing;
 -- Footer Sections
 -- ─────────────────────────────────────────────────────────────
 insert into public.footer_sections (section_key, title, sort_order) values
-  ('aboutUs',  'ABOUT JFAMCO', 1),
+  ('aboutUs',  'ABOUT Anton Luxury Clothings', 1),
   ('mainMenu', 'MAIN MENU',    2),
   ('links',    'LINKS',        3),
   ('contact',  'CONTACT',      4)
@@ -186,12 +186,12 @@ on conflict (section_key) do update set title = excluded.title, sort_order = exc
 -- ─────────────────────────────────────────────────────────────
 insert into public.footer_items (footer_section_id, label, action_type, action_value, icon_library, icon_name, sort_order) values
   -- About Us
-  ((select id from public.footer_sections where section_key = 'aboutUs'), 'We specialize in the distribution of quality footwear products, proudly sourced for Ghana.', 'text', null, null, null, 10),
-  ((select id from public.footer_sections where section_key = 'aboutUs'), 'Whether you are a household shopper or a retailer, we offer professional support and a consistent supply of premium footwear.', 'text', null, null, null, 20),
+  ((select id from public.footer_sections where section_key = 'aboutUs'), 'We specialize in the distribution of quality luxury clothing products, proudly made in Ghana.', 'text', null, null, null, 10),
+  ((select id from public.footer_sections where section_key = 'aboutUs'), 'Whether you are a household shopper or a retailer, we offer professional support and a consistent supply of premium clothing.', 'text', null, null, null, 20),
   -- Main Menu
   ((select id from public.footer_sections where section_key = 'mainMenu'), 'Home',        'navigate', 'shop',                     null, null, 10),
-  ((select id from public.footer_sections where section_key = 'mainMenu'), 'About Us',    'alert',    'About JFAMCO coming soon', null, null, 20),
-  ((select id from public.footer_sections where section_key = 'mainMenu'), 'JFAMCO Shop', 'navigate', 'shop',                     null, null, 30),
+  ((select id from public.footer_sections where section_key = 'mainMenu'), 'About Us',    'alert',    'About Anton Luxury Clothings coming soon', null, null, 20),
+  ((select id from public.footer_sections where section_key = 'mainMenu'), 'Anton Luxury Clothings Shop', 'navigate', 'shop',                     null, null, 30),
   ((select id from public.footer_sections where section_key = 'mainMenu'), 'Contact Us',  'alert',    'Contact Us coming soon',   null, null, 40),
   -- Links
   ((select id from public.footer_sections where section_key = 'links'), 'Cart',                 'navigate', 'cart',                           null, null, 10),

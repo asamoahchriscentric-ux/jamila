@@ -1,6 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, FlatList, StyleSheet, Pressable } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, Image, FlatList, StyleSheet, Pressable, Platform } from 'react-native';
 import { supabase } from '../lib/supabase';
+import { FontAwesome } from '@expo/vector-icons';
+
+// Conditionally import expo-av only for native platforms
+let Video, ResizeMode, AVPlaybackStatus;
+if (Platform.OS !== 'web') {
+  const expoAv = require('expo-av');
+  Video = expoAv.Video;
+  ResizeMode = expoAv.ResizeMode;
+  AVPlaybackStatus = expoAv.AVPlaybackStatus;
+}
 
 const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80';
 
@@ -24,6 +34,7 @@ const FALLBACK_ITEMS = [
     title: 'New Season Arrivals',
     description: 'Fresh drops from Nike, Adidas & more',
     image_url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80',
+    video_url: 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
     promo_label: 'NEW',
     label_color: '#10B981',
   },
@@ -32,6 +43,7 @@ const FALLBACK_ITEMS = [
     title: 'Premium Sneaker Sale',
     description: 'Up to 30% off selected styles this week',
     image_url: 'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9ff?auto=format&fit=crop&w=900&q=80',
+    video_url: 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
     promo_label: 'SALE 30%',
     label_color: '#EF4444',
   },
@@ -40,12 +52,30 @@ const FALLBACK_ITEMS = [
     title: 'Designer Heels & Loafers',
     description: 'Luxury footwear for every occasion',
     image_url: 'https://images.unsplash.com/photo-1543163521-1bf539e0cf6d?auto=format&fit=crop&w=900&q=80',
+    video_url: 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
     promo_label: 'HOT DEAL',
     label_color: '#F59E0B',
   },
 ];
 
-// Map a product row → carousel card shape
+// Map a carousel item row → carousel card shape
+const mapCarouselItemToCard = (item) => {
+  return {
+    id: item.id,
+    title: item.title,
+    description: item.description || item.subtitle || '',
+    image_url: item.image_url || DEFAULT_IMAGE,
+    video_url: item.video_url || null,
+    promo_label: null,
+    label_color: null,
+    price: 0,
+    productId: null,
+    button_text: item.button_text,
+    button_link: item.button_link,
+  };
+};
+
+// Map a product row → carousel card shape (fallback)
 const mapProductToCard = (p) => {
   const label = p.promo_label || p.tag || null;
   return {
@@ -53,11 +83,111 @@ const mapProductToCard = (p) => {
     title: p.name,
     description: p.description || '',
     image_url: p.url || p.image_url || DEFAULT_IMAGE,
+    video_url: p.video_url || null,
     promo_label: label,
     label_color: getBadgeColor(label, p.label_color),
     price: p.price ?? p.price_1kg ?? 0,
     productId: p.id,
   };
+};
+
+// Video Card Component
+const VideoCard = ({ item, onProductPress }) => {
+  const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+
+  const handlePlayPause = async () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        await videoRef.current.pauseAsync();
+        setIsPlaying(false);
+      } else {
+        await videoRef.current.playAsync();
+        setIsPlaying(true);
+      }
+    }
+  };
+
+  const handleMute = async () => {
+    if (videoRef.current) {
+      await videoRef.current.setIsMutedAsync(!isMuted);
+      setIsMuted(!isMuted);
+    }
+  };
+
+  return (
+    <Pressable
+      style={styles.carouselCard}
+      accessibilityRole="button"
+      accessibilityLabel={item.title}
+      onPress={() => onProductPress?.(item.productId)}
+    >
+      {item.video_url && Platform.OS !== 'web' ? (
+        <>
+          <Video
+            ref={videoRef}
+            source={{ uri: item.video_url }}
+            style={styles.video}
+            useNativeControls={false}
+            resizeMode={ResizeMode.COVER}
+            isLooping
+            shouldPlay={false}
+            isMuted={isMuted}
+            onPlaybackStatusUpdate={(status) => {
+              if (status.isLoaded) {
+                setIsPlaying(status.isPlaying);
+              }
+            }}
+          />
+          {/* Video Controls */}
+          <View style={styles.videoControls}>
+            <Pressable onPress={handlePlayPause} style={styles.controlButton}>
+              <FontAwesome
+                name={isPlaying ? "pause" : "play"}
+                size={20}
+                color="#FFF"
+              />
+            </Pressable>
+            <Pressable onPress={handleMute} style={styles.controlButton}>
+              <FontAwesome
+                name={isMuted ? "volume-off" : "volume-up"}
+                size={20}
+                color="#FFF"
+              />
+            </Pressable>
+          </View>
+        </>
+      ) : (
+        <Image
+          source={{ uri: item.image_url }}
+          style={styles.image}
+          resizeMode="contain"
+        />
+      )}
+
+      {/* Dark gradient overlay */}
+      <View style={styles.overlay} />
+
+      {/* Promo label badge */}
+      {item.promo_label ? (
+        <View style={[styles.promoBadge, { backgroundColor: item.label_color || '#4A0404' }]}>
+          <Text style={styles.promoBadgeText}>{item.promo_label}</Text>
+        </View>
+      ) : null}
+
+      {/* Text content */}
+      <View style={styles.textContainer}>
+        <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
+        {item.description ? (
+          <Text style={styles.description} numberOfLines={2}>{item.description}</Text>
+        ) : null}
+        {item.price > 0 && (
+          <Text style={styles.price}>GH₵{Number(item.price).toFixed(2)}</Text>
+        )}
+      </View>
+    </Pressable>
+  );
 };
 
 export default function CarouselComponent({ onProductPress }) {
@@ -70,7 +200,19 @@ export default function CarouselComponent({ onProductPress }) {
 
   const fetchFeaturedProducts = async () => {
     try {
-      // Try fetching featured products first
+      // Try fetching carousel items first
+      const { data: carouselItems, error: carouselErr } = await supabase
+        .from('carousel')
+        .select('*')
+        .eq('is_active', true)
+        .order('sort_order', { ascending: true });
+
+      if (!carouselErr && carouselItems && carouselItems.length > 0) {
+        setItems(carouselItems.map(mapCarouselItemToCard));
+        return;
+      }
+
+      // Fallback: fetch featured products
       const { data: featured, error: featErr } = await supabase
         .from('products')
         .select('*')
@@ -80,18 +222,6 @@ export default function CarouselComponent({ onProductPress }) {
 
       if (!featErr && featured && featured.length > 0) {
         setItems(featured.map(mapProductToCard));
-        return;
-      }
-
-      // Fallback: fetch top 3 products by position
-      const { data: top, error: topErr } = await supabase
-        .from('products')
-        .select('*')
-        .limit(3)
-        .order('position', { ascending: true });
-
-      if (!topErr && top && top.length > 0) {
-        setItems(top.map(mapProductToCard));
         return;
       }
 
@@ -125,38 +255,7 @@ export default function CarouselComponent({ onProductPress }) {
       keyExtractor={(item) => String(item.id)}
       contentContainerStyle={styles.listContainer}
       renderItem={({ item }) => (
-        <Pressable
-          style={styles.carouselCard}
-          accessibilityRole="button"
-          accessibilityLabel={item.title}
-          onPress={() => onProductPress?.(item.productId)}
-        >
-          <Image
-            source={{ uri: item.image_url }}
-            style={styles.image}
-            resizeMode="contain"
-          />
-          {/* Dark gradient overlay */}
-          <View style={styles.overlay} />
-
-          {/* Promo label badge */}
-          {item.promo_label ? (
-            <View style={[styles.promoBadge, { backgroundColor: item.label_color || '#4A0404' }]}>
-              <Text style={styles.promoBadgeText}>{item.promo_label}</Text>
-            </View>
-          ) : null}
-
-          {/* Text content */}
-          <View style={styles.textContainer}>
-            <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
-            {item.description ? (
-              <Text style={styles.description} numberOfLines={2}>{item.description}</Text>
-            ) : null}
-            {item.price > 0 && (
-              <Text style={styles.price}>GH₵{Number(item.price).toFixed(2)}</Text>
-            )}
-          </View>
-        </Pressable>
+        <VideoCard item={item} onProductPress={onProductPress} />
       )}
     />
   );
@@ -196,6 +295,27 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute',
+  },
+  video: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+  },
+  videoControls: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    flexDirection: 'row',
+    gap: 8,
+    zIndex: 10,
+  },
+  controlButton: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,

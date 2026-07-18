@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "Osebo-Shoes",
-    "slug": "osebo-shoes",
+    "name": "JAMILA",
+    "slug": "jamila",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
-    "scheme": "osebo-shoes",
+    "scheme": "jamila",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -14,15 +14,15 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.osebo.shoes",
+      "bundleIdentifier": "com.jamila.app",
       "buildNumber": "1",
       "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "Allow Osebo-Shoes to access your photos.",
-        "NSCameraUsageDescription": "Allow Osebo-Shoes to use your camera."
+        "NSPhotoLibraryUsageDescription": "Allow JAMILA to access your photos.",
+        "NSCameraUsageDescription": "Allow JAMILA to use your camera."
       }
     },
     "android": {
-      "package": "com.osebo.shoes",
+      "package": "com.jamila.app",
       "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#4A0404",
@@ -39,9 +39,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "name": "Osebo-Shoes",
-      "shortName": "Osebo",
-      "description": "Premium footwear for every occasion. Shop the finest shoes, sneakers and sandals at Osebo-Shoes."
+      "name": "JAMILA",
+      "shortName": "JAMILA",
+      "description": "Premium electronics for every home. Shop the finest electronics at JAMILA."
     },
     "extra": {
       "eas": {

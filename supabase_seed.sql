@@ -1,5 +1,5 @@
 -- =============================================================
--- JFAMCO / StepVault — Full Database Setup & Seed
+-- Anton Luxury Clothings — Full Database Setup & Seed
 -- HOW TO RUN:
 --   1. Go to https://supabase.com/dashboard
 --   2. Open your project → SQL Editor → New query
@@ -189,16 +189,16 @@ create policy "public read footer items"
 -- Categories
 -- ─────────────────────────────────────────────────────────────
 insert into public.categories (name, description, image_url, sort_order) values
-  ('Sneakers',  'Casual and athletic sneakers for everyday wear',           'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9ff?auto=format&fit=crop&w=900&q=80', 1),
-  ('Boots',     'Rugged and stylish boots for all occasions',               'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&w=900&q=80', 2),
-  ('Sandals',   'Comfortable open-toe sandals for warm weather',            'https://images.unsplash.com/photo-1603487742131-41651ecf9d5f?auto=format&fit=crop&w=900&q=80', 3),
-  ('Heels',     'Elegant heels for formal and semi-formal occasions',       'https://images.unsplash.com/photo-1543163521-1bf539e0cf6d?auto=format&fit=crop&w=900&q=80', 4),
-  ('Loafers',   'Slip-on loafers blending comfort with sophistication',     'https://images.unsplash.com/photo-1533867617858-e611d85c33c9?auto=format&fit=crop&w=900&q=80', 5),
-  ('Athletic',  'High-performance footwear for sports and training',        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80', 6),
-  ('Formal',    'Classic formal shoes for the office and special events',   'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&w=900&q=80', 7),
-  ('Casual',    'Laid-back everyday casual shoes',                         'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=900&q=80', 8),
-  ('Slippers',  'Cosy indoor and outdoor slippers',                        'https://images.unsplash.com/photo-1603487742131-41651ecf9d5f?auto=format&fit=crop&w=900&q=80', 9),
-  ('Running',   'Lightweight shoes built for speed and endurance',          'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=900&q=80', 10)
+  ('Shirts',    'Stylish shirts for every occasion',                         'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=900&q=80', 1),
+  ('Trousers',  'Comfortable and stylish trousers',                         'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=900&q=80', 2),
+  ('Jackets',   'Premium jackets for all seasons',                          'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=900&q=80', 3),
+  ('Suits',     'Elegant suits for formal occasions',                        'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=900&q=80', 4),
+  ('Dresses',   'Beautiful dresses for women',                              'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=900&q=80', 5),
+  ('Sportswear','High-performance athletic wear',                            'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=80', 6),
+  ('Casual',    'Laid-back everyday casual wear',                           'https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=900&q=80', 7),
+  ('Traditional','Authentic traditional African wear',                     'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=900&q=80', 8),
+  ('Accessories','Premium accessories to complete your look',               'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=900&q=80', 9),
+  ('Footwear',  'Quality shoes and sandals',                                'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=900&q=80', 10)
 on conflict (name) do update set
   description = excluded.description,
   image_url   = excluded.image_url,
@@ -251,7 +251,7 @@ on conflict do nothing;
 -- Footer Sections & Items
 -- ─────────────────────────────────────────────────────────────
 insert into public.footer_sections (section_key, title, sort_order) values
-  ('aboutUs',  'ABOUT JFAMCO', 1),
+  ('aboutUs',  'ABOUT Anton Luxury Clothings', 1),
   ('mainMenu', 'MAIN MENU',    2),
   ('links',    'LINKS',        3),
   ('contact',  'CONTACT',      4)
@@ -260,16 +260,16 @@ on conflict (section_key) do update set title = excluded.title, sort_order = exc
 -- About Us items
 insert into public.footer_items (section_id, label, action_type, sort_order) values
   ((select id from public.footer_sections where section_key = 'aboutUs'),
-   'We specialize in the distribution of quality footwear products, proudly sourced for Ghana.', 'text', 10),
+   'We specialize in the distribution of quality luxury clothing products, proudly made in Ghana.', 'text', 10),
   ((select id from public.footer_sections where section_key = 'aboutUs'),
-   'Whether you are a household shopper or a retailer, we offer professional support and a consistent supply of premium footwear.', 'text', 20)
+   'Whether you are a household shopper or a retailer, we offer professional support and a consistent supply of premium clothing.', 'text', 20)
 on conflict do nothing;
 
 -- Main Menu items
 insert into public.footer_items (section_id, label, action_type, action_value, sort_order) values
   ((select id from public.footer_sections where section_key = 'mainMenu'), 'Home',        'navigate', 'shop',                      10),
-  ((select id from public.footer_sections where section_key = 'mainMenu'), 'About Us',    'alert',    'About JFAMCO coming soon',  20),
-  ((select id from public.footer_sections where section_key = 'mainMenu'), 'JFAMCO Shop', 'navigate', 'shop',                      30),
+  ((select id from public.footer_sections where section_key = 'mainMenu'), 'About Us',    'alert',    'About Anton Luxury Clothings coming soon',  20),
+  ((select id from public.footer_sections where section_key = 'mainMenu'), 'Anton Luxury Clothings Shop', 'navigate', 'shop',                      30),
   ((select id from public.footer_sections where section_key = 'mainMenu'), 'Contact Us',  'alert',    'Contact Us coming soon',    40)
 on conflict do nothing;
 

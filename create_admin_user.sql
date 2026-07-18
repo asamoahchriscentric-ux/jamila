@@ -1,24 +1,24 @@
 -- ================================================
 -- CREATE ADMIN USER IN SUPABASE
 -- ================================================
--- This creates the admin user for jafancoadmin@gmail.com
+-- This creates the admin user for antonadmin@luxuryclothings.com
 -- ================================================
 
 -- Note: You cannot directly insert into auth.users via SQL
 -- This is a reference for what you need to do in the Supabase Dashboard
 
 -- Go to: Supabase Dashboard → Authentication → Users → Add User
--- Email: jafancoadmin@gmail.com
+-- Email: antonadmin@luxuryclothings.com
 -- Password: [Your chosen password]
 -- Auto Confirm User: ✅ (check this box)
 
 -- After creating the user, you can update their metadata:
 UPDATE auth.users
 SET raw_user_meta_data = jsonb_build_object(
-    'full_name', 'JFAMCO Admin',
+    'full_name', 'Anton Luxury Clothings Admin',
     'role', 'admin'
 )
-WHERE email = 'jafancoadmin@gmail.com';
+WHERE email = 'antonadmin@luxuryclothings.com';
 
 -- Verify the user was created
 SELECT 
@@ -28,7 +28,7 @@ SELECT
     email_confirmed_at,
     raw_user_meta_data
 FROM auth.users
-WHERE email = 'jafancoadmin@gmail.com';
+WHERE email = 'antonadmin@luxuryclothings.com';
 
 -- ================================================
 -- ALTERNATIVE: Check existing users

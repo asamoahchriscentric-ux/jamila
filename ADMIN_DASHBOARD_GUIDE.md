@@ -1,7 +1,7 @@
 # 🎛️ Admin Dashboard Guide
 
 ## Overview
-The Osebo Shoes app includes a comprehensive admin dashboard for managing products, orders, and customers.
+The Anton Luxury Clothings app includes a comprehensive admin dashboard for managing products, orders, and customers.
 
 ---
 
@@ -10,13 +10,13 @@ The Osebo Shoes app includes a comprehensive admin dashboard for managing produc
 ### Method 1: Sign In as Admin
 1. Click **"Sign In"** in the bottom navigation
 2. Enter admin credentials:
-   - **Email**: `jafancoadmin@gmail.com`
+   - **Email**: `antonadmin@luxuryclothings.com`
    - **Password**: (your admin password)
 3. You'll be automatically redirected to the Admin Dashboard
 
 ### Method 2: Admin Login Page
 - Navigate to the admin login page
-- Uses the same admin email: `jafancoadmin@gmail.com`
+- Uses the same admin email: `antonadmin@luxuryclothings.com`
 
 ---
 

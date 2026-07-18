@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, StyleSheet, Platform, ActivityIndicator } from 'react-native';
+import { WebView } from 'react-native-webview';
 
 /**
- * MapComponent - Leaflet Map Integration for Osebo-Shoes
+ * MapComponent - Leaflet Map Integration for Anton Luxury Clothings
  * 
  * This component integrates Leaflet maps for web platform.
  * For native platforms, it shows a placeholder with instructions.
@@ -13,7 +14,7 @@ import { View, Text, StyleSheet, Platform, ActivityIndicator } from 'react-nativ
  * - markers: array of {lat, lng, title, description} - markers to display
  * - onMarkerClick: function - callback when marker is clicked
  * - height: number or string - map container height (default: 400)
- * - showStoreLocations: boolean - whether to show Osebo-Shoes store locations
+ * - showStoreLocations: boolean - whether to show Anton Luxury Clothings store locations
  */
 
 const MapComponent = ({
@@ -29,26 +30,64 @@ const MapComponent = ({
   const [Marker, setMarker] = useState(null);
   const [Popup, setPopup] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const webViewRef = useRef(null);
+  const [isMapReady, setIsMapReady] = useState(false);
 
-  // Default store locations for Osebo-Shoes
+  // Default store locations for Anton Luxury Clothings
   const defaultStoreLocations = [
     {
       lat: 5.6037,
       lng: -0.1870,
-      title: 'Osebo-Shoes Main Store',
+      title: 'Anton Luxury Clothings Main Store',
       description: 'Visit our flagship store in Accra',
     },
     {
       lat: 5.5560,
       lng: -0.1969,
-      title: 'Osebo-Shoes Osu Branch',
-      description: 'Find us in Osu for premium footwear',
+      title: 'Anton Luxury Clothings Osu Branch',
+      description: 'Find us in Osu for premium clothing',
     },
   ];
 
   const allMarkers = showStoreLocations
     ? [...defaultStoreLocations, ...markers]
     : markers;
+
+  // Send markers to WebView when map is ready
+  useEffect(() => {
+    if (isMapReady && Platform.OS !== 'web' && webViewRef.current) {
+      webViewRef.current.postMessage(JSON.stringify({
+        type: 'setMarkers',
+        markers: allMarkers
+      }));
+    }
+  }, [isMapReady, allMarkers, Platform.OS]);
+
+  // Handle WebView messages
+  const handleWebViewMessage = (event) => {
+    try {
+      const data = JSON.parse(event.nativeEvent.data);
+      if (data.type === 'ready') {
+        setIsMapReady(true);
+        // Send initial markers
+        webViewRef.current.postMessage(JSON.stringify({
+          type: 'setMarkers',
+          markers: allMarkers
+        }));
+        // Set initial center
+        webViewRef.current.postMessage(JSON.stringify({
+          type: 'setCenter',
+          lat: center[0],
+          lng: center[1],
+          zoom: zoom
+        }));
+      } else if (data.type === 'markerClick' && onMarkerClick) {
+        onMarkerClick(data.data);
+      }
+    } catch (error) {
+      console.error('Error parsing WebView message:', error);
+    }
+  };
 
   useEffect(() => {
     if (Platform.OS === 'web') {
@@ -84,25 +123,27 @@ const MapComponent = ({
     }
   }, []);
 
-  // For native platforms (iOS/Android), show a message
+  // For native platforms (iOS/Android), use WebView with Leaflet
   if (Platform.OS !== 'web') {
     return (
       <View style={[styles.container, { height }]}>
-        <View style={styles.nativeMessage}>
-          <Text style={styles.nativeTitle}>Map View</Text>
-          <Text style={styles.nativeText}>
-            Interactive maps are available on the web version of Osebo-Shoes.
-          </Text>
-          <Text style={styles.nativeText}>
-            Visit our stores at:
-          </Text>
-          {defaultStoreLocations.map((location, index) => (
-            <View key={index} style={styles.locationItem}>
-              <Text style={styles.locationTitle}>{location.title}</Text>
-              <Text style={styles.locationDesc}>{location.description}</Text>
-            </View>
-          ))}
-        </View>
+        {!isMapReady && (
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color="#4A0404" />
+            <Text style={styles.loadingText}>Loading map...</Text>
+          </View>
+        )}
+        <WebView
+          ref={webViewRef}
+          source={require('../map.html')}
+          style={{ flex: 1 }}
+          onMessage={handleWebViewMessage}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          startInLoadingState={true}
+          scalesPageToFit={true}
+          mixedContentMode="compatibility"
+        />
       </View>
     );
   }
@@ -176,40 +217,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  nativeMessage: {
-    padding: 20,
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#FAF9F9',
+    justifyContent: 'center',
     alignItems: 'center',
-  },
-  nativeTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#4A0404',
-    marginBottom: 12,
-  },
-  nativeText: {
-    fontSize: 16,
-    color: '#5F5E5F',
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  locationItem: {
-    marginTop: 16,
-    padding: 12,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    width: '100%',
-    borderLeftWidth: 3,
-    borderLeftColor: '#4A0404',
-  },
-  locationTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1B1C1C',
-    marginBottom: 4,
-  },
-  locationDesc: {
-    fontSize: 14,
-    color: '#5F5E5F',
+    zIndex: 1,
   },
   loadingText: {
     marginTop: 12,
